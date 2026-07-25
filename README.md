@@ -38,6 +38,12 @@ nohup python3 proxy.py >/tmp/ar-proxy.log 2>&1 &
 ## 2. Qwen Configuration
 Qwen requires the settings to explicitly list the model and base URL, otherwise it ignores the `-m` flag.
 
+### Installation
+If you haven't installed Qwen Code yet, run:
+```bash
+npm install -g @qwen-code/qwen-code@latest
+```
+
 ### Option A: Using the Proxy (Recommended)
 **File:** `~/.qwen/settings.json`
 ```json
@@ -99,6 +105,12 @@ Qwen requires the settings to explicitly list the model and base URL, otherwise 
 ## 3. Claude Code Configuration
 Claude Code uses Anthropic standards, so the Base URL specifically **omits** `/v1`. Additionally, if you run as `root` on your server, you must use `"acceptEdits"` instead of `"bypassPermissions"`.
 
+### Installation
+If you haven't installed Claude Code yet, run:
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
 **1. Add to `~/.bashrc`:**
 ```bash
 export ANTHROPIC_AUTH_TOKEN="YOUR_AGENT_ROUTER_TOKEN"
@@ -118,6 +130,16 @@ export ANTHROPIC_MODEL="claude-opus-4-8"
 
 ## 4. OpenCode Configuration
 OpenCode fails to find the authentication cookie if relying on environment variables, so the key must be hardcoded. 
+
+### Installation
+If you haven't installed OpenCode yet, run:
+```bash
+# macOS / Linux (via curl)
+curl -fsSL https://opencode.ai/install | bash
+
+# OR via npm
+npm install -g opencode-ai
+```
 
 **1. File:** `~/.local/share/opencode/auth.json`
 ```json
@@ -167,12 +189,13 @@ OpenCode fails to find the authentication cookie if relying on environment varia
 ## 5. Codex Configuration
 AgentRouter only supports `chat` completions, but new versions of Codex completely dropped `chat` support. You must downgrade Codex first.
 
-**1. Downgrade Codex:**
+### Installation / Downgrade
+If you haven't installed Codex yet, or need to downgrade to version `0.80.0` (required for AgentRouter), run:
 ```bash
 npm install -g @openai/codex@0.80.0
 ```
 
-**2. File:** `~/.codex/config.toml`
+**File:** `~/.codex/config.toml`
 ```toml
 model = "gpt-5.5"
 model_provider = "openai-chat-completions"
