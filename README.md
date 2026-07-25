@@ -1,10 +1,18 @@
-# AgentRouter CLI Configurations 🚀
+# AgentRouter CLI Configurations
 
-This repository contains the configuration files and workarounds needed to perfectly integrate **AgentRouter** with popular AI coding assistants (Qwen, Claude Code, OpenCode, and Codex). 
+This repository contains the configuration files and workarounds needed to perfectly integrate AgentRouter with popular AI coding assistants (Qwen, Claude Code, OpenCode, and Codex). 
 
 At its core, this setup correctly maps AgentRouter's Base URLs, Models, and API Keys to each tool's specific format. It also includes fixes for known tool-specific quirks (like downgrading Codex and bypassing stream crashes).
 
-## 📥 Installation
+## Documentation References
+* **Codex**: https://agentrouter.org/docs/codex.html
+* **Claude Code**: https://agentrouter.org/docs/claude-code.html
+* **Qwen Code**: https://agentrouter.org/docs/qwencode.html
+* **OpenCode**: https://agentrouter.org/docs/opencode.html
+
+---
+
+## Installation
 
 First, clone this repository to your server:
 ```bash
@@ -14,7 +22,7 @@ cd agentrouter-cli-configs
 
 ---
 
-## 🔧 1. The Stream Proxy (Recommended)
+## 1. The Stream Proxy (Optional but Recommended)
 **Why you need this:** When streaming responses, AgentRouter occasionally injects a `data: null` block and a `billing_summary` event. This will completely crash strict JSON parsers like **Qwen** and **OpenCode**. It also strictly enforces `User-Agent` headers.
 
 This repository includes `proxy.py`, a lightweight local proxy that filters the stream on the fly and spoofs the User-Agent.
@@ -30,6 +38,7 @@ nohup python3 proxy.py >/tmp/ar-proxy.log 2>&1 &
 ## 2. Qwen Configuration
 Qwen requires the settings to explicitly list the model and base URL, otherwise it ignores the `-m` flag.
 
+### Option A: Using the Proxy (Recommended)
 **File:** `~/.qwen/settings.json`
 ```json
 {
@@ -56,7 +65,34 @@ Qwen requires the settings to explicitly list the model and base URL, otherwise 
   }
 }
 ```
-> **Note:** If you chose not to run `proxy.py`, change `http://127.0.0.1:8787/v1` to `https://agentrouter.org/v1`.
+
+### Option B: Direct Connection (Without Proxy)
+**File:** `~/.qwen/settings.json`
+```json
+{
+  "tools": { 
+    "approvalMode": "yolo" 
+  },
+  "env": {
+    "OPENAI_API_KEY": "YOUR_AGENT_ROUTER_TOKEN", 
+    "OPENAI_BASE_URL": "https://agentrouter.org/v1",
+    "OPENAI_MODEL": "claude-opus-4-8"
+  },
+  "modelProviders": {
+    "openai": [
+      {
+        "id": "claude-opus-4-8",
+        "name": "[AgentRouter] claude-opus-4-8",
+        "baseUrl": "https://agentrouter.org/v1"
+      }
+    ]
+  },
+  "model": {
+    "name": "claude-opus-4-8",
+    "baseUrl": "https://agentrouter.org/v1"
+  }
+}
+```
 
 ---
 
@@ -92,6 +128,7 @@ OpenCode fails to find the authentication cookie if relying on environment varia
 }
 ```
 
+### Option A: Using the Proxy (Recommended)
 **2. File:** `~/.config/opencode/config.json` *(or `opencode.json` in your project)*
 ```json
 {
@@ -107,7 +144,23 @@ OpenCode fails to find the authentication cookie if relying on environment varia
   "model": "agentrouter/gpt-5.5"
 }
 ```
-> **Note:** If you chose not to run `proxy.py`, change `http://127.0.0.1:8787/v1` to `https://agentrouter.org/v1`.
+
+### Option B: Direct Connection (Without Proxy)
+**2. File:** `~/.config/opencode/config.json` *(or `opencode.json` in your project)*
+```json
+{
+  "provider": {
+    "agentrouter": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "https://agentrouter.org/v1",
+        "apiKey": "YOUR_AGENT_ROUTER_TOKEN"
+      }
+    }
+  },
+  "model": "agentrouter/gpt-5.5"
+}
+```
 
 ---
 
