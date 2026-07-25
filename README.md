@@ -44,6 +44,9 @@ If you haven't installed Qwen Code yet, run:
 npm install -g @qwen-code/qwen-code@latest
 ```
 
+### Switching Models
+By defining multiple models in the `modelProviders` array below, you can easily switch models on the fly using the `-m` flag (e.g., `qwen -m kimi-3` or `qwen -m gpt-5.5`).
+
 ### Option A: Using the Proxy (Recommended)
 **File:** `~/.qwen/settings.json`
 ```json
@@ -61,6 +64,16 @@ npm install -g @qwen-code/qwen-code@latest
       {
         "id": "claude-opus-4-8",
         "name": "[AgentRouter] claude-opus-4-8",
+        "baseUrl": "http://127.0.0.1:8787/v1"
+      },
+      {
+        "id": "kimi-3",
+        "name": "[AgentRouter] kimi-3",
+        "baseUrl": "http://127.0.0.1:8787/v1"
+      },
+      {
+        "id": "gpt-5.5",
+        "name": "[AgentRouter] gpt-5.5",
         "baseUrl": "http://127.0.0.1:8787/v1"
       }
     ]
@@ -89,6 +102,16 @@ npm install -g @qwen-code/qwen-code@latest
       {
         "id": "claude-opus-4-8",
         "name": "[AgentRouter] claude-opus-4-8",
+        "baseUrl": "https://agentrouter.org/v1"
+      },
+      {
+        "id": "kimi-3",
+        "name": "[AgentRouter] kimi-3",
+        "baseUrl": "https://agentrouter.org/v1"
+      },
+      {
+        "id": "gpt-5.5",
+        "name": "[AgentRouter] gpt-5.5",
         "baseUrl": "https://agentrouter.org/v1"
       }
     ]
